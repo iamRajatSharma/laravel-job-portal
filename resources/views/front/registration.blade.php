@@ -59,7 +59,7 @@
                 success: function(response) {
                     if (response.status == false) {
                         var errors = response.errors;
-
+                        console.log(errors)
                         if (errors.name) {
                             $("#name").addClass("is-invalid")
                                 .siblings('p')
@@ -128,7 +128,7 @@
                             .removeClass('invalid-feedback')
                             .html('')
 
-
+                        window.location.href = "{{ route('account.login') }}"
                     }
                 }
             })

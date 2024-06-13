@@ -18,10 +18,9 @@ class AccountController extends Controller
     // process registeration form
     public function saveRegistration(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'name' => 'required',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:users,email,except,id',
             'password' => 'required|min:6|same:confirm_password',
             'confirm_password' => 'required'
         ]);
@@ -45,5 +44,11 @@ class AccountController extends Controller
                 'errors' => $validator->errors()
             ]);
         }
+    }
+
+
+    public function login()
+    {
+        return view('front.login');
     }
 }
