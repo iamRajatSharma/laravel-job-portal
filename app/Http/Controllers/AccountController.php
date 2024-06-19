@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -75,12 +76,40 @@ class AccountController extends Controller
 
     public function profile()
     {
-        return view('front.profile');
+        $id = Auth::user()->id;
+        $user = User::where('id', $id)->first();
+        // dd($user);
+        return view('front.profile', ["user" => $user]);
     }
 
     public function logout()
     {
         Auth::logout();
         return redirect()->route('account.login');
+    }
+
+    public function updateProfile(Request $request)
+    {
+        $id = Auth::user()->id;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            // 'email' => 'required|email|unique:users,email,' . $id . ', id'
+        ]);
+
+        // dd($validator);
+        if ($validator->passes()) {
+            $user = User::find($id);
+            $user->name = $request->name;
+            $user->email = $request->email;
+            $user->designation = $request->designation;
+            $user->mobile = $request->mobile;
+            $user->save();
+
+            return redirect()->route('account.profile')->with('success', 'Profile Updated Successfully');
+
+        } else {
+            return redirect()->route('home')
+                ->withErrors($validator);
+        }
     }
 }
