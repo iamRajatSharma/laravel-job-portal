@@ -14,6 +14,14 @@
                     <b>{{ Session::get('success') }}</b>
                 </div>
             @endif
+
+
+            @if (Session::has('error'))
+                <div class="alert alert-danger">
+                    <b>{{ Session::get('error') }}</b>
+                </div>
+            @endif
+
             <div class="row d-flex justify-content-center">
                 <div class="col-md-5">
                     <div class="card shadow border-0 p-5">
